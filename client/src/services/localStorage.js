@@ -1,8 +1,11 @@
-// Get user Information from localStorage
-export const getUserLogged = () => {
-  const local = JSON.parse(localStorage.getItem("userLogged"));
+// Set localstorage data
+export const setLocalStorageData = (key, data) => localStorage.setItem(key, JSON.stringify(data));
+
+// Get new localstorage data
+export const getLocalStorageData = (key) => {
+  const local = JSON.parse(localStorage.getItem(key));
   return local ? local : null;
 };
 
-// Add user information to localStorage
-export const setUserLogged = (data) => localStorage.setItem("userToken", JSON.stringify(data));
+// Remove localstorage data
+export const removeLocalStorageData = (key) => localStorage.removeItem(key);

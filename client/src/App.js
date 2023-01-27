@@ -3,20 +3,25 @@ import Details from "./pages/Details/Details";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import NotFound from "./pages/NotFound/NotFound";
+import SignUp from "./pages/SignUp/SignUp";
 import RequireAuth from "./Routing/RequireAuth";
+import "./App.css";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route exact path="/" element={<Login />} />
-        <Route element={<RequireAuth />}>
-          <Route exact path="/home" element={<Home />} />
-          <Route exact path="/details/:name" element={<Details />} />
-        </Route>
-        <Route exact path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
+    <div className="App">
+      <BrowserRouter>
+        <Routes>
+          <Route exact path="/" element={<Login />} />
+          <Route exact path="/signup" element={<SignUp />} />
+          <Route element={<RequireAuth />}>
+            <Route exact path="/home" element={<Home />} />
+            <Route exact path="/details" element={<Details />} />
+          </Route>
+          <Route exact path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 

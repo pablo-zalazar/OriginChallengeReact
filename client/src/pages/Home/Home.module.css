@@ -1,0 +1,16 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 100px;
+  padding: 20px;
+  background-color: rgb(226, 226, 226);
+}
+
+.container > div {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
