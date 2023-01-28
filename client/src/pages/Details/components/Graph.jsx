@@ -1,38 +1,46 @@
 import axios from "axios";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import { useEffect, useState } from "react";
-
+import { useEffect, useRef, useState } from "react";
+import { getIntervalApiValues, getDateApiValues } from "../../../services/apiCalls";
 import style from "./Graph.module.css";
 
 export default function Graph({ symbol, props }) {
   const [data, setData] = useState([]);
+  const newInterval = useRef();
   console.log(props);
+
+  const fetchData = async (interval) => {
+    console.log("fetching");
+    const { values } = await getIntervalApiValues(symbol, interval);
+    setData(values);
+  };
 
   useEffect(() => {
     (async () => {
       if (props) {
         if (props.type === "real-time") {
-          const { data } = await axios.get(
-            `https://api.twelvedata.com/time_series?symbol=${symbol}&interval=${props.interval}&apikey=9fd2b8b5aa8842178d1e029a6320df21`
+          fetchData(props.interval);
+          newInterval.current = setInterval(
+            () => {
+              fetchData(props.interval);
+            },
+            props.interval === "1min" ? 60000 : props.interval === "5min" ? 300000 : 900000
           );
-          console.log(data);
-          setData(data.values);
         } else {
-          console.log("first");
-          const { data } = await axios.get(
-            `https://api.twelvedata.com/time_series?start_date=${props.from}&end_date=${props.to}&symbol=${symbol}&interval=1day&apikey=9fd2b8b5aa8842178d1e029a6320df21`
-          );
-          setData(data.values);
+          const { values } = await getDateApiValues(symbol, props.from, props.to);
+          setData(values);
         }
       }
     })();
-  }, [symbol, props]);
+    return () => clearInterval(newInterval.current);
+  }, [props]);
 
   const options = {
     title: {
       text: symbol,
     },
+
     yAxis: {
       title: {
         text: "Cotización",
@@ -43,43 +51,15 @@ export default function Graph({ symbol, props }) {
       title: {
         text: "Intervalo",
       },
-      accessibility: {
-        rangeDescription: "Range: 0 to 1000",
-      },
-    },
-
-    plotOptions: {
-      series: {
-        label: {
-          connectorAllowed: false,
-        },
-        pointStart: 0,
-      },
+      type: "datetime",
     },
 
     series: [
       {
         name: symbol,
-        data: data.map((el) => parseInt(el.close)),
+        data: data.map((el) => [Date.parse(el.datetime), parseInt(el.close)]),
       },
     ],
-
-    responsive: {
-      rules: [
-        {
-          condition: {
-            maxWidth: 500,
-          },
-          chartOptions: {
-            legend: {
-              layout: "horizontal",
-              align: "center",
-              verticalAlign: "bottom",
-            },
-          },
-        },
-      ],
-    },
 
     accessibility: {
       enabled: false,
@@ -89,7 +69,7 @@ export default function Graph({ symbol, props }) {
   return (
     data.length > 0 && (
       <div className={style.graph}>
-        <HighchartsReact class="graph" highcharts={Highcharts} options={options} />
+        <HighchartsReact highcharts={Highcharts} options={options} />
       </div>
     )
   );

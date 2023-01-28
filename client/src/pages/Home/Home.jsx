@@ -6,17 +6,17 @@ import ActionsTable from "./components/ActionsTable/ActionsTable";
 import Search from "./components/Search/Search";
 import style from "./Home.module.css";
 import { removeLocalStorageData } from "../../services/localStorage";
+import { getAllApiValues } from "../../services/apiCalls";
 
 export default function Home() {
   const [apiActions, setApiActions] = useState([]);
   const [userFavoriteActions, setUserFavoriteActions] = useState([]);
-
   const { user, addActionContext, removeActionContext } = useContext(UserContext);
 
   useEffect(() => {
     (async () => {
-      const { data } = await axios.get("https://api.twelvedata.com/stocks?source=docs&exchange=NYSE");
-      setApiActions(data.data);
+      const { data } = await getAllApiValues();
+      setApiActions(data);
     })();
     removeLocalStorageData("action");
   }, []);
@@ -37,12 +37,12 @@ export default function Home() {
   };
 
   return (
-    <dic className={style.container}>
+    <div className={style.container}>
       <Header text="My Actions" />
       <div>
         <Search apiActions={apiActions} addAction={handleAddAction} userActions={user.favActions} />
         <ActionsTable userActions={userFavoriteActions} removeAction={handleRemoveAction} />
       </div>
-    </dic>
+    </div>
   );
 }
