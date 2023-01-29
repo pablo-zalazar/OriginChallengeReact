@@ -1,0 +1,64 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.container div {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.container select,
+input {
+  outline: none;
+  font-size: 16px;
+  padding: 2px;
+  outline: none;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.container .types {
+  display: flex;
+  gap: 20px;
+}
+
+.container .action {
+  display: flex;
+  gap: 10px;
+}
+
+.container input[type="radio"] {
+  transform: scale(1.5);
+}
+
+.container .action button {
+  font-size: 18px;
+  padding: 5px;
+  border: 1px solid black;
+  border-radius: 5px;
+  box-shadow: 5px 5px #999;
+}
+
+.container .action button:hover {
+  background-color: lightgray;
+}
+
+.container .action button:active {
+  background-color: lightgray;
+  box-shadow: 3px 3px #666;
+  transform: translateY(4px);
+}
+
+.container .action .error {
+  color: red;
+}
+
+@media screen and (max-width: 500px) {
+  .container .options .historic {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

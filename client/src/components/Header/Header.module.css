@@ -1,6 +1,38 @@
-header {
+.header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 10px;
   border-bottom: 1px solid black;
+}
+
+.header div {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.header div {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.header div button {
+  background: none;
+  border: none;
+  width: 30px;
+  height: 30px;
+}
+
+.header div button * {
+  width: 100%;
+  height: 100%;
+}
+
+@media screen and (max-width: 500px) {
+  .header {
+    flex-direction: column;
+    gap: 10px;
+  }
 }

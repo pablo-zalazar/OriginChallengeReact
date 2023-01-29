@@ -21,7 +21,7 @@ const UserProvider = ({ children }) => {
 
   const signUpContext = async (values) => {
     try {
-      const { data } = await users.signup(values);
+      await users.signup(values);
     } catch (error) {
       throw new Error(error.response.data.msg);
     }

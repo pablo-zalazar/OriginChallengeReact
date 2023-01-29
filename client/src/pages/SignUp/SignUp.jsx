@@ -20,13 +20,26 @@ export default function SignUp() {
     setState({ ...state, [key]: e.target.value });
   };
 
+  const validation = () => {
+    if (!state.username || !state.password || !state.password2) {
+      setError("Todos campos son requeridos");
+      return false;
+    } else if (state.username.length < 4) {
+      setError("El usuario debe tener al menos 4 caracteres");
+      return false;
+    } else if (state.password.length < 8 || state.password2.length < 8) {
+      setError("Los passwords deben tener al menos 8 caracteres");
+      return false;
+    } else if (state.password !== state.password2) {
+      setError("Los passwords tienen que coincidir");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!state.username || !state.password || !state.password2) {
-      setError("Ambos campos son requeridos");
-    } else if (state.password !== state.password2) {
-      setError("los passwords tienen que coincidir");
-    } else {
+    if (validation()) {
       try {
         e.preventDefault();
         await signUpContext(state);
@@ -51,7 +64,7 @@ export default function SignUp() {
             name="username"
             value={state.username}
             onChange={(e) => handleChange("username", e)}
-            placeholder="usuario"
+            placeholder="4 caracteres minimo"
           />
         </div>
         <div>
@@ -61,19 +74,14 @@ export default function SignUp() {
             type={showPassword1 ? "text" : "password"}
             id="password"
             name="password"
-            placeholder="password"
+            placeholder="8 caracteres minimo"
             value={state.password}
             onChange={(e) => handleChange("password", e)}
           />
-          {showPassword1 ? (
-            <button className={style.show} type="button" onClick={() => setShowPassword1(!showPassword1)}>
-              <AiFillEyeInvisible />
-            </button>
-          ) : (
-            <button className={style.show} type="button" onClick={() => setShowPassword1(!showPassword1)}>
-              <AiFillEye />
-            </button>
-          )}
+
+          <button className={style.show} type="button" tabIndex="-1" onClick={() => setShowPassword1(!showPassword1)}>
+            {showPassword1 ? <AiFillEyeInvisible /> : <AiFillEye />}
+          </button>
         </div>
         <div>
           <label htmlFor="password2">Repetir password</label>
@@ -82,19 +90,13 @@ export default function SignUp() {
             type={showPassword2 ? "text" : "password"}
             id="password2"
             name="password2"
-            placeholder="password"
+            placeholder="8 caracteres minimo"
             value={state.password2}
             onChange={(e) => handleChange("password2", e)}
           />
-          {showPassword2 ? (
-            <button className={style.show} type="button" onClick={() => setShowPassword2(!showPassword2)}>
-              <AiFillEyeInvisible />
-            </button>
-          ) : (
-            <button className={style.show} type="button" onClick={() => setShowPassword2(!showPassword2)}>
-              <AiFillEye />
-            </button>
-          )}
+          <button className={style.show} type="button" tabIndex="-1" onClick={() => setShowPassword2(!showPassword2)}>
+            {showPassword2 ? <AiFillEyeInvisible /> : <AiFillEye />}
+          </button>
         </div>
         <input type="submit" value="SignUp" />
         <p>

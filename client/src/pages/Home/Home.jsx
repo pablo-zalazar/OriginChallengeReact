@@ -1,32 +1,37 @@
 import { useContext, useEffect, useState } from "react";
-import axios from "axios";
 import Header from "../../components/Header/Header";
 import UserContext from "../../context/userContext";
 import ActionsTable from "./components/ActionsTable/ActionsTable";
 import Search from "./components/Search/Search";
 import style from "./Home.module.css";
-import { removeLocalStorageData } from "../../services/localStorage";
 import { getAllApiValues } from "../../services/apiCalls";
+import { isEmpty } from "../../utils/isEmpty";
+import Loader from "../../components/Loader/Loader";
 
 export default function Home() {
-  const [apiActions, setApiActions] = useState([]);
-  const [userFavoriteActions, setUserFavoriteActions] = useState([]);
   const { user, addActionContext, removeActionContext } = useContext(UserContext);
+
+  const [actions, setActions] = useState([]);
+  const [userFavoriteActions, setUserFavoriteActions] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
-      const { data } = await getAllApiValues();
-      setApiActions(data);
+      setLoading(true);
+      try {
+        const { data } = await getAllApiValues();
+        setActions(data);
+        setLoading(false);
+      } catch (error) {}
     })();
-    removeLocalStorageData("action");
   }, []);
 
   useEffect(() => {
-    if (apiActions.length > 0) {
-      const userActions = apiActions.filter((action) => user.favActions.includes(action.symbol));
+    if (!isEmpty(actions)) {
+      const userActions = actions.filter((action) => user.favActions.includes(action.symbol));
       setUserFavoriteActions(userActions);
     }
-  }, [apiActions, user.favActions]);
+  }, [actions, user.favActions]);
 
   const handleRemoveAction = async (action) => {
     await removeActionContext({ id: user.id, action });
@@ -39,10 +44,15 @@ export default function Home() {
   return (
     <div className={style.container}>
       <Header text="My Actions" />
-      <div>
-        <Search apiActions={apiActions} addAction={handleAddAction} userActions={user.favActions} />
-        <ActionsTable userActions={userFavoriteActions} removeAction={handleRemoveAction} />
-      </div>
+
+      {loading && <Loader />}
+
+      {!loading && !isEmpty(actions) && (
+        <div>
+          <Search actions={actions} addAction={handleAddAction} userActions={user.favActions} />
+          <ActionsTable userActions={userFavoriteActions} removeAction={handleRemoveAction} />
+        </div>
+      )}
     </div>
   );
 }

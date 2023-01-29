@@ -13,10 +13,22 @@ export const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
+      validate: {
+        len: {
+          args: [4, 255],
+          msg: "El usuario debe tener al menos 4 caracteres",
+        },
+      },
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        len: {
+          args: [8, 255],
+          msg: "El password debe tener al menos 8 caracteres",
+        },
+      },
     },
     favActions: {
       type: DataTypes.ARRAY(DataTypes.STRING),

@@ -1,42 +1,44 @@
 import { useNavigate } from "react-router-dom";
-import { setLocalStorageData } from "../../../../services/localStorage";
+import { isEmpty } from "../../../../utils/isEmpty";
 import style from "./ActionTable.module.css";
 
 export default function ActionsTable({ userActions, removeAction }) {
   const navigate = useNavigate();
 
-  const handleAddAction = (values) => {
-    setLocalStorageData("action", values);
-    navigate("/details", { replace: true });
+  const handleViewAction = ({ symbol, name, currency }) => {
+    navigate(`/details/${name}/${symbol}/${currency}`);
   };
 
+  if (isEmpty(userActions)) {
+    return <h2>No tiene acciones agregadas</h2>;
+  }
+
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Símbolo</th>
-          <th>Nombre</th>
-          <th>Moneda</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {userActions.length > 0 &&
-          userActions.map((action) => (
-            <tr key={action.symbol}>
+    <div className={style.container}>
+      <table className={style.table}>
+        <thead>
+          <tr>
+            <th>Símbolo</th>
+            <th>Nombre</th>
+            <th>Moneda</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {userActions?.map(({ symbol, name, currency }) => (
+            <tr key={symbol}>
               <td>
-                <button onClick={() => handleAddAction({ name: action.name, symbol: action.symbol, currency: action.currency })}>
-                  {action.symbol}
-                </button>
+                <button onClick={() => handleViewAction({ name, symbol, currency })}>{symbol}</button>
               </td>
-              <td>{action.name}</td>
-              <td>{action.currency}</td>
+              <td>{name}</td>
+              <td>{currency}</td>
               <td>
-                <button onClick={() => removeAction(action.symbol)}>Eliminar</button>
+                <button onClick={() => removeAction(symbol)}>Eliminar</button>
               </td>
             </tr>
           ))}
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
   );
 }

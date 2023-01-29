@@ -1,9 +1,8 @@
-import { useContext } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import UserContext from "../context/userContext";
+import { getLocalStorageData } from "../services/localStorage";
 
 const RequireAuth = () => {
-  const { user } = useContext(UserContext);
+  const user = getLocalStorageData("user");
   if (user) return <Outlet />;
   else return <Navigate to="/" />;
 };

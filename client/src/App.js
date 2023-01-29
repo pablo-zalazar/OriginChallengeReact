@@ -9,14 +9,14 @@ import "./App.css";
 
 function App() {
   return (
-    <div className="App">
+    <div className="app">
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<Login />} />
           <Route exact path="/signup" element={<SignUp />} />
           <Route element={<RequireAuth />}>
             <Route exact path="/home" element={<Home />} />
-            <Route exact path="/details" element={<Details />} />
+            <Route exact path="/details/:name/:symbol/:currency" element={<Details />} />
           </Route>
           <Route exact path="*" element={<NotFound />} />
         </Routes>

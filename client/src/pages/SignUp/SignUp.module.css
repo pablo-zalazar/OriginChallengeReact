@@ -1,3 +1,11 @@
+/* .container {
+  min-height: 100vh;
+  background-color: rgb(179, 179, 179);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
+
 form {
   border: 1px solid black;
   width: 400px;
@@ -42,7 +50,7 @@ form div .input:focus {
 }
 
 form > div .input::selection {
-  background-color: #2e6fd1;
+  background-color: #74a2e7;
 }
 
 form > div .show {
@@ -82,6 +90,10 @@ form input[type="submit"]:active {
 form a {
   text-decoration: none;
   color: #2e6fd1;
+}
+
+form p {
+  text-align: center;
 }
 
 .error {

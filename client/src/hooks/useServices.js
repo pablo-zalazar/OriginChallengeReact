@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const useServices = () => {
-  const BASE_URL = "http://localhost:8000";
+  const BASE_URL = process.env.REACT_APP_BACK_URL;
 
   // api routes
   const routeUrl = {

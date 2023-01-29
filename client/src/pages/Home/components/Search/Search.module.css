@@ -2,14 +2,14 @@
   display: flex;
   align-items: center;
   gap: 10px;
-}
-
-.container select {
-  padding: 5px;
+  flex-wrap: wrap;
 }
 
 .container select {
   outline: none;
+  padding: 5px;
+  border: 1px solid black;
+  border-radius: 5px;
 }
 
 .container button {
@@ -28,4 +28,14 @@
   background-color: lightgray;
   box-shadow: 3px 3px #666;
   transform: translateY(4px);
+}
+
+.container .action {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.error {
+  color: red;
 }
